@@ -1,0 +1,19 @@
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+#interface {
+  display: table;
+  width: 100%;
+}
+
+#interface > div {
+  display: table-row;
+}
+
+#interface > div > div {
+  display: table-cell;
+  border: 1px solid red;
+  padding: 4px;
+}
