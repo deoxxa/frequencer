@@ -117,7 +117,7 @@ jQuery(function() {
   var interface_top = jQuery("<div />");
   for (var i=0;i<loop.tpb;++i) {
     (function() {
-      var div = jQuery("<div />");
+      var div = jQuery("<div>" + (i<9?"0":"") + (i+1) + "</div>");
       loop.on(i, function() {
         div.css("background-color", "#A0A0A0").animate({backgroundColor: "#FFFFFF"}, 100);
       });
