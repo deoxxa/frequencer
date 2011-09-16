@@ -1,11 +1,18 @@
 body {
   margin: 0px;
   padding: 0px;
+  font-family: Arial;
+}
+
+#wrapper {
+  width: 950px;
+  margin: auto;
 }
 
 #interface {
   display: table;
-  width: 100%;
+  margin: auto;
+  border: 1px solid #808080;
 }
 
 #interface > div {
@@ -14,6 +21,6 @@ body {
 
 #interface > div > div {
   display: table-cell;
-  border: 1px solid red;
-  padding: 4px;
+  border: 1px solid #808080;
+  padding: 8px;
 }

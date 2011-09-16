@@ -5,7 +5,24 @@
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
-    <div id="interface"></div>
+    <div id="wrapper">
+      <h1>Frequencer</h1>
+      <h3>The Freakin' Sequencer</h3>
+      <div id="interface"></div>
+      <h4>Information for use</h4>
+      <p>Click in a box to enable/disable the instrument in that row for that beat, or use one of the keyboard shortcuts (see below).</p>
+      <p>The top row reflects which beat is currently active.</p>
+      <p>The second through fifth rows are a kick, snare, hihat and wood block.</p>
+      <p>Press <em>space</em> to start or stop the sequencer.</p>
+      <p>Press <em>z</em> to use the kick drum, <em>x</em> to use the snare drum, <em>n</em> to use the hihat or <em>m</em> to use the wood block.</p>
+      <p><em>Right click</em> anywhere on the page, select <em>view source</em> and start hacking!</p>
+      <h4>Information about the implementation</h4>
+      <p>This is using only HTML and Javascript, there is no flash or any kind of plugin magic going on.</p>
+      <p>I'm using a simple wrapper around the &lt;audio&gt; tag, <em>SoundManager</em>, to play the same sample more than once at a time and to cut down the number of tags needed to do so.</p>
+      <p>All the timing is controlled by the <em>Loop</em> object via callbacks that trigger <em>Pad</em> objects to feed <em>Track</em> objects to <em>SoundManager</em>. Right now it's very inefficient and will most likely be completely rewritten. In saying that though, if this level of functionality can be achieved with such a naiive approach, some careful optimisations should yield quite satisfactory results.</p>
+      <h4>Information about the author</h4>
+      <p>This was written by <a href="https://github.com/deoxxa">deoxxa</a> after work on the 16 of September, 2011.<p>
+    </div>
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/underscore-min.js"></script>

@@ -25,7 +25,7 @@ function Loop(bpm, tpb) {
   this.bpm = bpm;
   this.tpb = tpb;
   this.cur = 0;
-  this.listeners = [];
+  this.listeners = {};
   this.interval = null;
 
   for (var i=0;i<this.tpb;++i) {
@@ -64,14 +64,47 @@ Loop.prototype.toggle = function() {
   }
 };
 
-function Track(file) {
+function Sound(file) {
   this.file = file;
 }
 
+function Pad(sm, sound) {
+  this.sm = sm;
+  this.sound = sound;
+  this.enabled = false;
+  this.bound = null;
+}
+
+Pad.prototype.bind = function(el) {
+  var self = this;
+  this.bound = el;
+  el.click(function() {
+    if (self.enabled) {
+      el.css("background-color", "#FFFFFF");
+      self.enabled = false;
+    } else {
+      el.css("background-color", "#A0A0A0");
+      self.enabled = true;
+    }
+  });
+};
+
+Pad.prototype.play = function() {
+  if (this.enabled) {
+    this.sm.play(this.sound.file);
+  }
+};
+
+Pad.prototype.toggle = function() {
+  this.bound.click();
+};
+
 jQuery(function() {
   var sm = new SoundManager();
-  var k = new Kibo();
+  var loop = new Loop(90, 16); // Change me!
+  var k = new Kibo(); // Don't change me :(
 
+  // Change me too!
   var sounds = {
     "kick": "sounds/kick.wav",
     "hat": "sounds/hat.wav",
@@ -79,44 +112,41 @@ jQuery(function() {
     "block": "sounds/block.wav",
   };
 
-  var loop = new Loop(90);
-
-  k.down("space", function() { loop.toggle(); });
-
   var interface = jQuery("#interface");
 
   var interface_top = jQuery("<div />");
-  for (var i=0;i<16;++i) {
+  for (var i=0;i<loop.tpb;++i) {
     (function() {
       var div = jQuery("<div />");
       loop.on(i, function() {
-        div.css("background-color", "#A0A0FF").animate({backgroundColor: "#FFFFFF"}, 100);
+        div.css("background-color", "#A0A0A0").animate({backgroundColor: "#FFFFFF"}, 100);
       });
       interface_top.append(div);
     })();
   }
   interface.append(interface_top);
 
+  var pads = {};
   _.forEach(sounds, function(file, name) {
-    var track = new Track(file);
+    var sound = new Sound(file);
     var divs = jQuery("<div />");
-    for (var i=0;i<16;++i) {
+    pads[name] = {};
+    for (var i=0;i<loop.tpb;++i) {
       (function() {
-        var checked = false;
+        var pad = new Pad(sm, sound);
+        pads[name][i] = pad;
         var div = jQuery("<div />");
-        div.click(function() {
-          if (checked) {
-            div.css("background-color", "#FFFFFF");
-            checked = false;
-          } else {
-            div.css("background-color", "#A0A0FF");
-            checked = true;
-          }
-        });
-        loop.on(i, function() { if (checked) { sm.play(file); } });
+        pad.bind(div);
+        loop.on(i, function() { pad.play(); });
         divs.append(div);
       })();
     }
     interface.append(divs);
   });
+
+  k.down("space", function() { loop.toggle(); return false; });
+  k.down("z", function() { pads.kick[loop.cur].toggle(); return false; });
+  k.down("x", function() { pads.snare[loop.cur].toggle(); return false; });
+  k.down("n", function() { pads.hat[loop.cur].toggle(); return false; });
+  k.down("m", function() { pads.block[loop.cur].toggle(); return false; });
 });
